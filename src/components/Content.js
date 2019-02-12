@@ -187,7 +187,7 @@ class Content extends React.Component {
         // Left or Right Handed Batsmen
         var handType = [];
         var i;
-        if(this.state.dataLoadedMatch){
+        if(this.state.dataLoadedPlayer){
             for(i = 0; i < this.state.rawPlayer.data.length - 1; i++){
                 handType.push(this.state.rawPlayer.data[i].Batting_Hand);
             }
