@@ -81,6 +81,7 @@ class Content extends React.Component {
                     ]
                 }
             });
+            this.forceUpdate();
         }
     }
 
@@ -129,7 +130,7 @@ class Content extends React.Component {
                     ]
                 }
             });
-            /*this.forceUpdate();*/
+            this.forceUpdate();
         }
     }
 
@@ -180,6 +181,7 @@ class Content extends React.Component {
                     ]
                 }
             });
+            this.forceUpdate();
         }
     }
 
@@ -225,6 +227,7 @@ class Content extends React.Component {
                     ]
                 }
             });
+            this.forceUpdate();
         }
     }
 
@@ -294,6 +297,7 @@ class Content extends React.Component {
                     ]
                 }
             });
+            this.forceUpdate();
         }
     }
 
@@ -363,6 +367,7 @@ class Content extends React.Component {
                     ]
                 }
             });
+            this.forceUpdate();
         }
     }
 
@@ -585,6 +590,7 @@ class Content extends React.Component {
             this.setState({
                 infoBox1: this.state.rawMatch.data.length - 1
             });
+            this.forceUpdate();
         }
     }
 
@@ -602,6 +608,7 @@ class Content extends React.Component {
             this.setState({
                 infoBox2: superovers
             });
+            this.forceUpdate();
         }
     }
 
@@ -619,9 +626,8 @@ class Content extends React.Component {
             this.setState({
                 infoBox3: fours
             });
+            this.forceUpdate();
         }
-
-        this.forceUpdate();
     }
 
     dataForInfoBox4(){
@@ -638,9 +644,8 @@ class Content extends React.Component {
             this.setState({
                 infoBox4: sixes
             });
+            this.forceUpdate();
         }
-
-        this.forceUpdate();
     }
 
     // Converting CSV file to JSON data
