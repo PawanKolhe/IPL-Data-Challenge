@@ -1,0 +1,70 @@
+nav {
+    width: 200px;
+    background-color: #343D45;
+    height: auto;
+    padding: 0px 0px 20px;
+    position: fixed;
+    left: 0px;
+    height: inherit;
+    z-index: 200;
+}
+
+.nav-link-container a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 18px 20px;
+    font-size: 1.05rem;
+}
+
+.nav-link-container a i {
+    padding-right: 8px;
+}
+
+.nav-link-container a:hover {
+    background-color: rgba(255, 255, 255, 1);
+    color: #343D45;
+    font-weight: bold;
+}
+
+.logo-container{
+    width: 100%;
+    text-align: center;
+}
+
+.logo-container img {
+    width: 80%;
+    margin: 0px auto;
+}
+
+.search-container{
+    padding: 5px 5%;
+    width: 100%;
+}
+
+.make-nav-small {
+    width: 60px;
+}
+
+/* CSS for Nav Search Bar */
+/*.sf-nav-bar::-webkit-input-placeholder {
+    color: #adb1b4;
+    opacity: 0.8;
+}
+
+.sf-nav-bar:focus::-webkit-input-placeholder{
+    color: #adb1b4;
+    opacity: 0.5;
+}
+
+.sf-nav-bar {
+    margin-bottom: 10px;
+    display: block;
+    background-color: #242a30;
+    color:#fff;
+}
+
+.sf-nav-bar:hover, .sf-nav-bar:focus {
+    background-color: #1f2429;
+}*/
+

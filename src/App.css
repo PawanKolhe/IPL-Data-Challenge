@@ -1,0 +1,40 @@
+.middle {
+  height: 100%;
+  display: flex;
+}
+
+.hide {
+  display: none;
+  opacity: 0;
+}
+
+.width-100-percent {
+  width: 100% !important;
+}
+
+/*=== Setting background color for fullscreen ===*/
+#root {
+  background: rgb(241, 242, 247);
+  overflow-y: auto;
+}
+
+:-moz-full-screen {
+  background: rgb(241, 242, 247);
+  overflow-y: auto;
+}
+
+:-webkit-full-screen {
+  background: rgb(241, 242, 247);
+  overflow-y: auto;
+}
+
+:-ms-fullscreen {
+  background: rgb(241, 242, 247);
+  width: 100%; /* needed to center contents in IE */
+  overflow-y: auto;
+}
+
+:fullscreen {
+  background: rgb(241, 242, 247);
+  overflow-y: auto;
+}

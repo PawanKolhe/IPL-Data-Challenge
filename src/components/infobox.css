@@ -1,0 +1,68 @@
+.infobox {
+    height: 180px;
+    border-radius: 10px;
+    padding: 20px 20px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.06), 0 3px 6px rgba(0,0,0,0.13);
+    position: relative;
+    min-width: 0;
+    color: #fff;
+
+    background: linear-gradient(135deg, #343D45, rgb(72, 80, 87));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.infobox-title p {
+    font-size: 1.45rem;
+    margin: 0px;
+}
+
+.infobox-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.infobox-icon {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    opacity: 0.2;
+}
+
+.infobox-text P{
+    margin: 5px 0px;
+    font-size: 0.9rem;
+    opacity: 0.4;
+}
+
+.infobox-data {
+    font-size: 3rem;
+    color: #FED107;
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
+}
+
+@media (max-width: 650px) {
+    .infobox {
+        height: 140px;
+    }
+    .infobox-title p {
+        font-size: 1.3rem;
+    }
+    .infobox-data {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 350px) {
+    .infobox-data {
+        font-size: 1.9rem;
+    }
+    .infobox-text p {
+        font-size: 0.8rem;
+    }
+}
