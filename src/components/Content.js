@@ -667,6 +667,13 @@ class Content extends React.Component {
     savePlayerMatch(result){this.setState({rawPlayerMatch: result});}*/
 
     render() {
+        var w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.getElementsByTagName('body')[0],
+        x = w.innerWidth || e.clientWidth || g.clientWidth;
+        /*y = w.innerHeight|| e.clientHeight|| g.clientHeight;*/
+
         return (
             <div className='content-container'>
                 <div className='infobox-container'>
@@ -683,7 +690,7 @@ class Content extends React.Component {
                     <ChartDisplay selectChart='pie' chartData={this.state.chartData4} titleText='Left / Right Handed Batsmen' />
                     <ChartDisplay selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData5} titleText='Bowling Skill' />
                     <ChartDisplay selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData6} titleText='Player Nationality' />
-                    <ChartDisplay selectChart={window.innerWidth < 900 ? 'horizontalBar' : 'bar'} displayLegend={false} chartData={this.state.chartData8} titleText='Player Dismissal Types' />
+                    <ChartDisplay selectChart={x < 900 ? 'horizontalBar' : 'bar'} displayLegend={false} chartData={this.state.chartData8} titleText='Player Dismissal Types' />
                 </div>
             </div>
             
