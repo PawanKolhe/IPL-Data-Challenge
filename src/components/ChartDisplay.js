@@ -1,6 +1,7 @@
 import React from 'react';
 import './chart.css';
 import ChartComponent from 'react-chartjs-2';
+import 'chartjs-plugin-deferred';
 
 class ChartDisplay extends React.Component {
     constructor(props){
@@ -35,6 +36,13 @@ class ChartDisplay extends React.Component {
                     type={this.state.selectChart}
                     data={this.state.chartData}
                     options={{
+                        plugins: {
+                            deferred: {
+                              xOffset: 50,
+                              yOffset: '40%',
+                              delay: 50
+                            }
+                        },
                         maintainAspectRatio: false,
                         responsive: true,
                         title: {
