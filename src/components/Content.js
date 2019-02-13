@@ -382,7 +382,7 @@ class Content extends React.Component {
         if(this.state.dataLoadedBallByBall){
             for(i = 0; i < this.state.rawBallByBall.data.length - 1; i++){
                 if(this.state.rawBallByBall.data[i].Batsman_Scored !== 'Do_nothing'){
-                    switch(this.state.rawBallByBall.data[i].Over_Id){
+                    switch(Number(this.state.rawBallByBall.data[i].Over_Id)){
                         case 1:
                             one = bigInt(one).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
                             break;
@@ -650,9 +650,9 @@ class Content extends React.Component {
 
     // Converting CSV file to JSON data
     getChartData(){
-        Papa.parse('./ipl-csv-dataset/Match.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveMatch});
-        Papa.parse('./ipl-csv-dataset/Player.csv', {header: true, download: true, dynamicTyping: true, complete: this.savePlayer});
-        Papa.parse('./ipl-csv-dataset/Ball_by_Ball.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveBallByBall});
+        Papa.parse('./ipl-csv-dataset/Match.csv', {header: true, download: true, dynamicTyping: false, complete: this.saveMatch});
+        Papa.parse('./ipl-csv-dataset/Player.csv', {header: true, download: true, dynamicTyping: false, complete: this.savePlayer});
+        Papa.parse('./ipl-csv-dataset/Ball_by_Ball.csv', {header: true, download: true, dynamicTyping: false, complete: this.saveBallByBall});
         /*Papa.parse('./ipl-csv-dataset/Season.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveSeason});
         Papa.parse('./ipl-csv-dataset/Team.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveTeam});
         Papa.parse('./ipl-csv-dataset/Player_Match.csv', {header: true, download: true, dynamicTyping: true, complete: this.savePlayerMatch});*/
