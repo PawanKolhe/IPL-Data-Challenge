@@ -35,7 +35,8 @@ A data visualization challenge to build a web app with IPL (Indian Premier Leagu
   - For the icons I used Font Awesome Pro.
   - I decided to add a fullscreen toggle button in the header bar because an admin panel is best viewed in fullscreen. Less clutter, the better. :)
   
-## Potential Improvements
+## Potential New Features/Improvements
   - Can add a loading animation while the data and graphs are loading.
   - Display more data related to players such as who won the most purple caps?
   - Make a trivia using this data to make the web app more fun and interactive.
+  - Light/Dark Theme
