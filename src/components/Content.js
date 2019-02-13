@@ -2,7 +2,7 @@ import React from 'react';
 import './content.css';
 import Papa from 'papaparse';
 
-import Chart from './Chart';
+import ChartDisplay from './ChartDisplay';
 import InfoBox from './InfoBox';
 
 
@@ -676,14 +676,14 @@ class Content extends React.Component {
                     <InfoBox data={this.state.infoBox4} title='Total Sixes' icon={<i class="fas fa-cricket fa-4x"></i>} text='Number of balls crossing the boundary.'  />
                 </div>
                 <div className='graph-container'>
-                    <Chart selectChart='line' chartData={this.state.chartData7} titleText='Average Runs Every Over' selectLabel={true} selectLabelText='Overs' />
-                    <Chart selectChart='bar' displayLegend={false} chartData={this.state.chartData1} titleText='Batting / Fielding Decision' />
-                    <Chart selectChart='pie' chartData={this.state.chartData3} titleText='Result Type'  />
-                    <Chart selectChart='pie' chartData={this.state.chartData2} titleText='Matches Hosted By Country' />
-                    <Chart selectChart='pie' chartData={this.state.chartData4} titleText='Left / Right Handed Batsmen' />
-                    <Chart selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData5} titleText='Bowling Skill' />
-                    <Chart selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData6} titleText='Player Nationality' />
-                    <Chart selectChart='bar' displayLegend={false} chartData={this.state.chartData8} titleText='Player Dismissal Types' />
+                    <ChartDisplay selectChart='line' chartData={this.state.chartData7} titleText='Average Runs Every Over' selectLabel={true} selectLabelText='Overs' />
+                    <ChartDisplay selectChart='bar' displayLegend={false} chartData={this.state.chartData1} titleText='Batting / Fielding Decision' />
+                    <ChartDisplay selectChart='doughnut' chartData={this.state.chartData3} titleText='Result Type'  />
+                    <ChartDisplay selectChart='pie' chartData={this.state.chartData2} titleText='Matches Hosted By Country' />
+                    <ChartDisplay selectChart='pie' chartData={this.state.chartData4} titleText='Left / Right Handed Batsmen' />
+                    <ChartDisplay selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData5} titleText='Bowling Skill' />
+                    <ChartDisplay selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData6} titleText='Player Nationality' />
+                    <ChartDisplay selectChart={window.innerWidth < 900 ? 'horizontalBar' : 'bar'} displayLegend={false} chartData={this.state.chartData8} titleText='Player Dismissal Types' />
                 </div>
             </div>
             

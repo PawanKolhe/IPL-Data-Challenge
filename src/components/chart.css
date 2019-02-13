@@ -13,3 +13,9 @@
         height: 300px;
     }
 }
+
+@media (max-width: 650px) {
+    .chart {
+        border-radius: 0px;
+    }
+}

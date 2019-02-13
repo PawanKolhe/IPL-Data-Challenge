@@ -2,7 +2,7 @@ import React from 'react';
 import './chart.css';
 import ChartComponent from 'react-chartjs-2';
 
-class Chart extends React.Component {
+class ChartDisplay extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -45,7 +45,7 @@ class Chart extends React.Component {
                         legend: {
                             display: this.props.displayLegend
                         },
-                        scales: this.props.selectChart === 'pie' ? 
+                        scales: this.props.selectChart === 'pie' || this.props.selectChart === 'doughnut' ? 
                         {
                             xAxis: [{
                                 gridLineWidth: 0,
@@ -75,4 +75,4 @@ class Chart extends React.Component {
     }
 }
 
-export default Chart;
+export default ChartDisplay;
