@@ -676,6 +676,9 @@ class Content extends React.Component {
 
         return (
             <div className='content-container'>
+                <div className='title-container'>
+                    <h1><span className='bold'>Indian Premier League</span> Statistics</h1>
+                </div>
                 <div className='infobox-container'>
                     <InfoBox data={this.state.infoBox1} title='Total Matches' icon={<i class="fas fa-cricket fa-4x"></i>} text='Matches played till now.' />
                     <InfoBox data={this.state.infoBox2} title='Total Superovers' icon={<i class="fas fa-cricket fa-4x"></i>} text='Number of tie matches till now.' />
