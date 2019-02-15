@@ -28,3 +28,24 @@ code {
   color: #fff;
   background: #61696F;
 }
+
+/* SCROLL BAR */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #E6E6E6; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(52, 61, 69, 1);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 61, 69, 0.9); 
+}
