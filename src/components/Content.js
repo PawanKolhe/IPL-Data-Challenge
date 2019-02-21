@@ -658,7 +658,7 @@ class Content extends React.Component {
         Papa.parse('./ipl-csv-dataset/Player_Match.csv', {header: true, download: true, dynamicTyping: true, complete: this.savePlayerMatch});*/
     }
 
-    // Saving JSON data to state
+    // Saving JSON data to state and calling associated functions to process data
     saveMatch(result){this.setState({rawMatch: result, dataLoadedMatch: true});this.dataForChart1();this.dataForChart2();this.dataForChart3();this.dataForInfoBox1();this.dataForInfoBox2();}
     savePlayer(result){this.setState({rawPlayer: result, dataLoadedPlayer: true});this.dataForChart4();this.dataForChart5();this.dataForChart6();}
     saveBallByBall(result){this.setState({rawBallByBall: result, dataLoadedBallByBall: true});this.dataForChart7();this.dataForChart8();this.dataForInfoBox3();this.dataForInfoBox4();}
@@ -667,6 +667,7 @@ class Content extends React.Component {
     savePlayerMatch(result){this.setState({rawPlayerMatch: result});}*/
 
     render() {
+        /*==== Calculates current width of browser ====*/
         var w = window,
         d = document,
         e = d.documentElement,

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    /*=== Adjustments for mobile devices ===*/
     if($(window).width() < 650){
         $(".nav-menu").toggleClass("make-nav-small");
         $(".content-container").toggleClass("margin-left-reduce");

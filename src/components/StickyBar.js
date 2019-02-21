@@ -7,7 +7,7 @@ class StickyBar extends React.Component {
         return (
             <div className='sticky-bar'>
                 <div className='left-bar'>
-                    <button aria-label='NavToggle' className='nav-toggle-button'><i class="fas fa-align-left fa-2x"></i></button>
+                    <button aria-label='Navigation Toggle' className='nav-toggle-button'><i class="fas fa-align-left fa-2x"></i></button>
                     <div className='sf-sticky-bar-container'>
                         <input aria-label='Search' className='search-field sf-sticky-bar' placeholder='Search' />
                     </div>
