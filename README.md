@@ -13,6 +13,9 @@ A data visualization challenge to build a web app with IPL (Indian Premier Leagu
   - [jQuery](http://jquery.com) - javaScript library
   - [Papaparse](https://www.papaparse.com/) - for parsing CSV files to JSON
 
+## Dataset
+  - [Click Here](https://www.kaggle.com/harsha547/indian-premier-league-csv-dataset)  
+
 ## Link to Hosted Website
   - [Click Here](https://socialcops.netlify.com)  
   *(Hosted on Netlify)*
