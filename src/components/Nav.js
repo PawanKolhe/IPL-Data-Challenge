@@ -14,11 +14,11 @@ function Nav() {
                 <input className='search-field sf-nav-bar' placeholder='Search' />
             </div>*/}
             <div className='nav-link-container'>
-                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i class="fas fa-home-alt"></i> <span className='nav-link-name'>Dashboard</span></a>
-                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i class="fas fa-user-alt"></i> <span className='nav-link-name'>Profile</span></a>
-                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i class="fas fa-calendar-week"></i> <span className='nav-link-name'>Calendar</span></a>
-                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i class="fas fa-question"></i> <span className='nav-link-name'>FAQs</span></a>
-                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i class="fas fa-cog"></i> <span className='nav-link-name'>Settings</span></a>
+                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i className="fas fa-home-alt"></i> <span className='nav-link-name'>Dashboard</span></a>
+                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i className="fas fa-user-alt"></i> <span className='nav-link-name'>Profile</span></a>
+                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i className="fas fa-calendar-week"></i> <span className='nav-link-name'>Calendar</span></a>
+                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i className="fas fa-question"></i> <span className='nav-link-name'>FAQs</span></a>
+                <a href='https://pawankolhe.com' onClick={(e) => {e.preventDefault();}}><i className="fas fa-cog"></i> <span className='nav-link-name'>Settings</span></a>
             </div>
         </nav>
     )

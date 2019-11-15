@@ -1,7 +1,6 @@
 import React from 'react';
 import './chart.css';
 import ChartComponent from 'react-chartjs-2';
-import 'chartjs-plugin-deferred';
 
 class ChartDisplay extends React.Component {
     constructor(props){
@@ -34,7 +33,7 @@ class ChartDisplay extends React.Component {
             <div className='chart' >
                 <ChartComponent
                     type={this.state.selectChart}
-                    data={this.state.chartData}
+                    data={this.state.chartData ? this.state.chartData : {}}
                     options={{
                         plugins: {
                             deferred: {

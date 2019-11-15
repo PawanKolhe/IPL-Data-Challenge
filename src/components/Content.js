@@ -1,18 +1,15 @@
 import React from 'react';
-import './content.css';
 import Papa from 'papaparse';
 
-import ChartDisplay from './ChartDisplay';
 import InfoBox from './InfoBox';
+import ChartDisplay from './ChartDisplay';
 
+import './content.css';
 
 class Content extends React.Component {
     constructor(){
         super();
         this.state = {
-            dataLoadedMatch: false,
-            dataLoadedPlayer: false,
-            dataLoadedBallByBall: false,
             chartData2: {},
             chartData3: {},
             chartData4: {},
@@ -27,39 +24,70 @@ class Content extends React.Component {
             rawTeam: {},
             rawPlayerMatch: {},*/
         };
-        this.saveMatch = this.saveMatch.bind(this);
-        this.savePlayer = this.savePlayer.bind(this);
-        this.saveBallByBall = this.saveBallByBall.bind(this);
-        /*this.saveSeason = this.saveSeason.bind(this);
-        this.saveTeam = this.saveTeam.bind(this);
-        this.savePlayerMatch = this.savePlayerMatch.bind(this);*/
-        this.dataForChart1 = this.dataForChart1.bind(this);
-        this.dataForChart2 = this.dataForChart2.bind(this);
-        this.dataForChart3 = this.dataForChart3.bind(this);
-        this.dataForChart4 = this.dataForChart4.bind(this);
-        this.dataForChart5 = this.dataForChart5.bind(this);
-        this.dataForChart6 = this.dataForChart6.bind(this);
-        this.dataForChart7 = this.dataForChart7.bind(this);
-        this.dataForChart8 = this.dataForChart8.bind(this);
-        this.dataForInfoBox1 = this.dataForInfoBox1.bind(this);
-        this.dataForInfoBox2 = this.dataForInfoBox2.bind(this);
-        this.dataForInfoBox3 = this.dataForInfoBox3.bind(this);
-        this.dataForInfoBox4 = this.dataForInfoBox4.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.getChartData();
     }
 
-    dataForChart1(){
+    // Converting CSV file to JSON data
+    getChartData = () => {
+        Papa.parse('./ipl-csv-dataset/Match.csv', {
+            header: true,
+            download: true,
+            dynamicTyping: true,
+            complete: this.saveMatch
+        });
+        Papa.parse('./ipl-csv-dataset/Player.csv', {
+            header: true,
+            download: true,
+            dynamicTyping: true,
+            complete: this.savePlayer
+        });
+        Papa.parse('./ipl-csv-dataset/Ball_by_Ball.csv', {
+            header: true,
+            download: true,
+            dynamicTyping: true,
+            complete: this.saveBallByBall
+        });
+        /*Papa.parse('./ipl-csv-dataset/Season.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveSeason});
+        Papa.parse('./ipl-csv-dataset/Team.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveTeam});
+        Papa.parse('./ipl-csv-dataset/Player_Match.csv', {header: true, download: true, dynamicTyping: true, complete: this.savePlayerMatch});*/
+    }
+
+    // Saving JSON data to state and calling associated functions to process data
+    saveMatch = (result) => {
+        this.setState({ rawMatch: result });
+        this.dataForChart1();
+        this.dataForChart2();
+        this.dataForChart3();
+        this.dataForInfoBox1and2();
+    }
+    savePlayer = (result) => {
+        this.setState({ rawPlayer: result });
+        this.dataForChart4();
+        this.dataForChart5();
+        this.dataForChart6();
+    }
+    saveBallByBall = (result) => {
+        this.setState({ rawBallByBall: result });
+        this.dataForChart7();
+        this.dataForChart8();
+        this.dataForInfoBox3and4();
+    }
+    /*saveSeason = (result) => {this.setState({rawSeason: result});}
+    saveTeam = (result) => {this.setState({rawTeam: result});}
+    savePlayerMatch = (result) => {this.setState({rawPlayerMatch: result});}*/
+
+    dataForChart1 = () => {
         // Bat or Field Decision
-        var batCount = 0;
-        if(this.state.dataLoadedMatch){
-            for(var i = 0; i < this.state.rawMatch.data.length; i++){
-                if(this.state.rawMatch.data[i].Toss_Decision === "bat"){
+        let batCount = 0;
+        if(Object.keys(this.state.rawMatch).length !== 0){
+            this.state.rawMatch.data.forEach(element => {
+                if(element.Toss_Decision === "bat"){
                     batCount++;
                 }
-            }
+            });
 
             this.setState({
                 chartData1: {
@@ -81,40 +109,29 @@ class Content extends React.Component {
                     ]
                 }
             });
-            this.forceUpdate();
         }
     }
 
-    dataForChart2(){
+    dataForChart2 = () => {
         // Host Countries
-        var countries = [];
-        var i;
-        if(this.state.dataLoadedMatch){
-            for(i = 0; i < this.state.rawMatch.data.length - 1; i++){
-                countries.push(this.state.rawMatch.data[i].Host_Country);
-            }
-
-            // Finds the unique values of array (a) and occurrence of each value (b)
-            var a = [], b = [], prev;
-            countries.sort();
-            for (i = 0; i < countries.length; i++) {
-                if ( countries[i] !== prev ) {
-                    a.push(countries[i]);
-                    b.push(1);
-                    
+        let countries = {};
+        
+        if(Object.keys(this.state.rawMatch).length !== 0){
+            this.state.rawMatch.data.forEach(element => {
+                if(countries[element.Host_Country] !== undefined) {
+                    countries[element.Host_Country] += 1;
                 } else {
-                    b[b.length-1]++;
+                    countries[element.Host_Country] = 1;
                 }
-                prev = countries[i];
-            }
+            });
 
             this.setState({
                 chartData2: {
-                    labels: [...a],
+                    labels: [...Object.keys(countries)],
                     datasets: [
                         {
                             label: 'Host Countries',
-                            data: [...b],
+                            data: [...Object.values(countries)],
                             backgroundColor: [
                                 'rgba(33, 150, 243,0.5)',
                                 'rgba(76, 175, 80,0.5)',
@@ -134,36 +151,25 @@ class Content extends React.Component {
         }
     }
 
-    dataForChart3(){
+    dataForChart3 = () => {
         // Result Type
-        var winType = [];
-        var i;
-        if(this.state.dataLoadedMatch){
-            for(i = 0; i < this.state.rawMatch.data.length - 1; i++){
-                winType.push(this.state.rawMatch.data[i].Win_Type);
-            }
-
-            // Finds the unique values of array (a) and occurrence of each value (b)
-            var a = [], b = [], prev;
-            winType.sort();
-            for (i = 0; i < winType.length; i++) {
-                if ( winType[i] !== prev ) {
-                    a.push(winType[i]);
-                    b.push(1);
-                    
+        let winType = {};
+        if(Object.keys(this.state.rawMatch).length !== 0){
+            this.state.rawMatch.data.forEach(element => {
+                if(winType[element.Win_Type] !== undefined) {
+                    winType[element.Win_Type] += 1;
                 } else {
-                    b[b.length-1]++;
+                    winType[element.Win_Type] = 1;
                 }
-                prev = winType[i];
-            }
+            });
 
             this.setState({
                 chartData3: {
-                    labels: [...a],
+                    labels: [...Object.keys(winType)],
                     datasets: [
                         {
                             label: 'Result Type',
-                            data: [...b],
+                            data: [...Object.values(winType)],
                             backgroundColor: [
                                 'rgba(58, 55, 52,0.5)',
                                 'rgba(9, 168, 250,0.5)',
@@ -185,35 +191,25 @@ class Content extends React.Component {
         }
     }
 
-    dataForChart4(){
+    dataForChart4 = () => {
         // Left or Right Handed Batsmen
-        var handType = [];
-        var i;
-        if(this.state.dataLoadedPlayer){
-            for(i = 0; i < this.state.rawPlayer.data.length - 1; i++){
-                handType.push(this.state.rawPlayer.data[i].Batting_Hand);
-            }
-
-            // Finds the unique values of array (a) and occurrence of each value (b)
-            var a = [], b = [], prev;
-            handType.sort();
-            for (i = 0; i < handType.length; i++) {
-                if ( handType[i] !== prev && handType[i] !== 'NULL') {
-                    a.push(handType[i]);
-                    b.push(1);
-                } else {
-                    b[b.length-1]++;
+        var handType = {};
+        if(Object.keys(this.state.rawPlayer).length !== 0){
+            handType.Left_Hand = 0;
+            handType.Right_Hand = 0;
+            this.state.rawPlayer.data.forEach(element => {
+                if(element.Batting_Hand === "Left_Hand" || element.Batting_Hand === "Right_Hand") {
+                    handType[element.Batting_Hand] += 1;
                 }
-                prev = handType[i];
-            }
+            });
 
             this.setState({
                 chartData4: {
-                    labels: [...a],
+                    labels: [...Object.keys(handType)],
                     datasets: [
                         {
                             label: 'Left or Right Handed Batsmen',
-                            data: [...b],
+                            data: [...Object.values(handType)],
                             backgroundColor: [
                                 'rgba(244, 67, 54, 0.5)',
                                 'rgba(9, 98, 234, 0.5)'
@@ -231,41 +227,31 @@ class Content extends React.Component {
         }
     }
 
-    dataForChart5(){
+    dataForChart5 = () => {
         // Bowling Skill
-        var bowlingSkill = [];
-        var i;
-        if(this.state.dataLoadedPlayer){
-            for(i = 0; i < this.state.rawPlayer.data.length - 1; i++){
-                bowlingSkill.push(this.state.rawPlayer.data[i].Bowling_Skill);
-            }
-
-            // Finds the unique values of array (a) and occurrence of each value (b)
-            var a = [], b = [], prev;
-            bowlingSkill.sort();
-            for (i = 0; i < bowlingSkill.length; i++) {
-                if ( bowlingSkill[i] !== prev && bowlingSkill[i] !== 'NULL') {
-                    a.push(bowlingSkill[i]);
-                    b.push(1);
-                } else {
-                    b[b.length-1]++;
+        var bowlingSkill = {};
+        if(Object.keys(this.state.rawPlayer).length !== 0){
+            this.state.rawPlayer.data.forEach(element => {
+                if(bowlingSkill[element.Bowling_Skill] !== undefined) {
+                    bowlingSkill[element.Bowling_Skill] += 1;
+                } else if(element.Bowling_Skill !== undefined && element.Bowling_Skill !== "NULL") {
+                    bowlingSkill[element.Bowling_Skill] = 1;
                 }
-                prev = bowlingSkill[i];
-            }
+            });
 
             this.setState({
                 chartData5: {
-                    labels: [...a],
+                    labels: [...Object.keys(bowlingSkill)],
                     datasets: [
                         {
                             label: 'Bowling Skill',
-                            data: [...b],
+                            data: [...Object.values(bowlingSkill)],
                             backgroundColor: [
                                 'rgba(0, 150, 136, 0.5)',
                                 'rgba(0, 150, 136, 0.5)',
                                 'rgba(0, 150, 136, 0.5)',
                                 'rgba(0, 150, 136, 0.5)',
-                                'rgba(0, 150, 136,0.5)',
+                                'rgba(0, 150, 136, 0.5)',
                                 'rgba(0, 150, 136, 0.5)',
                                 'rgba(0, 150, 136, 0.5)',
                                 'rgba(0, 150, 136, 0.5)',
@@ -277,17 +263,17 @@ class Content extends React.Component {
                                 'rgba(0, 150, 136, 0.5)'
                             ],
                             borderColor: [
-                                'rgba(0, 150, 136,1)',
-                                'rgba(0, 150, 136, 1)',
-                                'rgba(0, 150, 136, 1)',
-                                'rgba(0, 150, 136, 1)',
-                                'rgba(0, 150, 136,1)',
                                 'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)',
-                                'rgba(0, 150, 136,1)',
+                                'rgba(0, 150, 136, 1)',
+                                'rgba(0, 150, 136, 1)',
+                                'rgba(0, 150, 136, 1)',
+                                'rgba(0, 150, 136, 1)',
+                                'rgba(0, 150, 136, 1)',
+                                'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)',
                                 'rgba(0, 150, 136, 1)'
@@ -301,41 +287,31 @@ class Content extends React.Component {
         }
     }
 
-    dataForChart6(){
+    dataForChart6 = () => {
         // Player Nationality
-        var nationality = [];
-        var i;
-        if(this.state.dataLoadedPlayer){
-            for(i = 0; i < this.state.rawPlayer.data.length - 1; i++){
-                nationality.push(this.state.rawPlayer.data[i].Country);
-            }
-
-            // Finds the unique values of array (a) and occurrence of each value (b)
-            var a = [], b = [], prev;
-            nationality.sort();
-            for (i = 0; i < nationality.length; i++) {
-                if ( nationality[i] !== prev && this.state.rawPlayer.data[i].Is_Umpire !== '1') {
-                    a.push(nationality[i]);
-                    b.push(1);
-                } else {
-                    b[b.length-1]++;
+        var nationality = {};
+        if(Object.keys(this.state.rawPlayer).length !== 0){
+            this.state.rawPlayer.data.forEach(element => {
+                if(nationality[element.Country] !== undefined) {
+                    nationality[element.Country] += 1;
+                } else if(element.Country !== undefined && element.Is_Umpire !== "1") {
+                    nationality[element.Country] = 1;
                 }
-                prev = nationality[i];
-            }
+            });
 
             this.setState({
                 chartData6: {
-                    labels: [...a],
+                    labels: [...Object.keys(nationality)],
                     datasets: [
                         {
                             label: 'Player Nationality',
-                            data: [...b],
+                            data: [...Object.values(nationality)],
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.5)',
                                 'rgba(54, 162, 235, 0.5)',
                                 'rgba(245, 135, 31, 0.5)',
                                 'rgba(128, 203, 174, 0.5)',
-                                'rgba(255,99,132,0.5)',
+                                'rgba(255, 99, 132, 0.5)',
                                 'rgba(54, 162, 235, 0.5)',
                                 'rgba(255, 206, 86, 0.5)',
                                 'rgba(75, 192, 192, 0.5)',
@@ -347,17 +323,17 @@ class Content extends React.Component {
                                 'rgba(128, 203, 174, 0.5)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
+                                'rgba(255, 99, 132, 1)',
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(245, 135, 31, 1)',
                                 'rgba(128, 203, 174, 1)',
-                                'rgba(255,99,132,1)',
+                                'rgba(255, 99, 132, 1)',
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(255, 206, 86, 1)',
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(153, 102, 255, 1)',
                                 'rgba(255, 159, 64, 1)',
-                                'rgba(255,99,132,1)',
+                                'rgba(255, 99, 132, 1)',
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(245, 135, 31, 1)',
                                 'rgba(128, 203, 174, 1)'
@@ -371,135 +347,31 @@ class Content extends React.Component {
         }
     }
 
-    dataForChart7(){
+    dataForChart7 = () => {
         // Average runs per over
-        var i = 0, j = 0;
-        var one = 0, two = 0, three = 0, four = 0, five = 0, six = 0, seven = 0, eight = 0, nine = 0, ten = 0, eleven = 0, twelve = 0, thirteen = 0, fourteen = 0, fifteen = 0, sixteen = 0, seventeen = 0, eighteen = 0, ninteen = 0, twenty = 0;
-        var overs = [];
-        var result = [];
-        var bigInt = require("big-integer");
+        let averages = {};
 
-        if(this.state.dataLoadedBallByBall){
-            for(i = 0; i < this.state.rawBallByBall.data.length - 1; i++){
-                if(this.state.rawBallByBall.data[i].Batsman_Scored !== 'Do_nothing'){
-                    switch(this.state.rawBallByBall.data[i].Over_Id){
-                        case 1:
-                            one = bigInt(one).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 2:
-                            two = bigInt(two).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 3:
-                            three = bigInt(three).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 4:
-                            four = bigInt(four).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 5:
-                            five = bigInt(five).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 6:
-                            six = bigInt(six).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 7:
-                            seven = bigInt(seven).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 8:
-                            eight = bigInt(eight).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 9:
-                            nine = bigInt(nine).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 10:
-                            ten = bigInt(ten).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 11:
-                            eleven = bigInt(eleven).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 12:
-                            twelve = bigInt(twelve).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 13:
-                            thirteen = bigInt(thirteen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 14:
-                            fourteen = bigInt(fourteen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 15:
-                            fifteen = bigInt(fifteen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 16:
-                            sixteen = bigInt(sixteen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 17:
-                            seventeen = bigInt(seventeen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 18:
-                            eighteen = bigInt(eighteen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 19:
-                            ninteen = bigInt(ninteen).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        case 20:
-                            twenty = bigInt(twenty).plus(this.state.rawBallByBall.data[i].Batsman_Scored);
-                            break;
-                        default:
-                            break;
-                    }
+        if(Object.keys(this.state.rawBallByBall).length !== 0) {
+            this.state.rawBallByBall.data.forEach(element => {
+                if(averages[element.Over_Id] !== undefined && element.Batsman_Scored !== 'Do_nothing' && element.Batsman_Scored !== ' ') {
+                    averages[element.Over_Id] = { sum : averages[element.Over_Id].sum + element.Batsman_Scored, count : averages[element.Over_Id].count + 1 };
+                } else if(element.Over_Id !== undefined && element.Batsman_Scored !== 'Do_nothing' && element.Batsman_Scored !== ' ') {
+                    averages[element.Over_Id] = { sum : element.Batsman_Scored, count : 1 };
                 }
-                
-            }
-
-            for(i = 0; i < this.state.rawBallByBall.data.length - 1; i++){
-                overs.push(this.state.rawBallByBall.data[i].Over_Id);
-            }
-            // Finds the unique values of array (a) and occurrence of each value (b)
-            var a = [], b = [], prev;
-            overs.sort(function(x,y){
-                return x - y
             });
-            for (i = 0; i < overs.length; i++) {
-                if ( overs[i] !== prev) {
-                    a.push(overs[i]);
-                    b.push(1);
-                } else {
-                    b[b.length-1]++;
-                }
-                prev = overs[i];
-            }
 
-            result.push(one);
-            result.push(two);
-            result.push(three);
-            result.push(four);
-            result.push(five);
-            result.push(six);
-            result.push(seven);
-            result.push(eight);
-            result.push(nine);
-            result.push(ten);
-            result.push(eleven);
-            result.push(twelve);
-            result.push(thirteen);
-            result.push(fourteen);
-            result.push(fifteen);
-            result.push(sixteen);
-            result.push(seventeen);
-            result.push(eighteen);
-            result.push(ninteen);
-            result.push(twenty);
-
-            for(j = 0 ; j < 20; j++){
-                result[j] /= b[j]
-            }
+            Object.entries(averages).forEach(element => {
+                console.log(element);
+                averages[element[0]] = parseFloat(element[1].sum) / element[1].count;
+            });
 
             this.setState({
                 chartData7: {
-                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ,17, 18, 19, 20],
+                    labels: [...Object.keys(averages)],
                     datasets: [
                         {
                             label: 'Average Runs Every Over',
-                            data: [...result],
+                            data: [...Object.values(averages)],
                             backgroundColor: [
                                 'rgba(103, 58, 183, 0.5)'
                             ],
@@ -515,40 +387,31 @@ class Content extends React.Component {
         }
     }
 
-    dataForChart8(){
+    dataForChart8 = () => {
         // Types of Dismissals
-        var dismissalType = [];
-        var i;
-        if(this.state.dataLoadedBallByBall){
-            for(i = 0; i < this.state.rawBallByBall.data.length - 1; i++){
-                dismissalType.push(this.state.rawBallByBall.data[i].Dissimal_Type);
-            }
-
-            var a = [], b = [], prev;
-            dismissalType.sort();
-            for (i = 0; i < dismissalType.length; i++) {
-                if ( dismissalType[i] !== prev && dismissalType[i] !== ' ') {
-                    a.push(dismissalType[i]);
-                    b.push(1);
-                } else {
-                    b[b.length-1]++;
+        var dismissalType = {};
+        if(Object.keys(this.state.rawBallByBall).length !== 0){
+            this.state.rawBallByBall.data.forEach(element => {
+                if(dismissalType[element.Dissimal_Type] !== undefined) {
+                    dismissalType[element.Dissimal_Type] += 1;
+                } else if(element.Dissimal_Type !== undefined && element.Dissimal_Type !== ' ') {
+                    dismissalType[element.Dissimal_Type] = 1;
                 }
-                prev = dismissalType[i];
-            }
+            });
 
             this.setState({
                 chartData8: {
-                    labels: [...a],
+                    labels: [...Object.keys(dismissalType)],
                     datasets: [
                         {
                             label: 'Types of Dismissals',
-                            data: [...b],
+                            data: [...Object.values(dismissalType)],
                             backgroundColor: [
                                 'rgba(233, 30, 99, 0.5)',
                                 'rgba(233, 30, 99, 0.5)',
                                 'rgba(233, 30, 99, 0.5)',
                                 'rgba(233, 30, 99, 0.5)',
-                                'rgba(233, 30, 99,0.5)',
+                                'rgba(233, 30, 99, 0.5)',
                                 'rgba(233, 30, 99, 0.5)',
                                 'rgba(233, 30, 99, 0.5)',
                                 'rgba(233, 30, 99, 0.5)',
@@ -560,7 +423,6 @@ class Content extends React.Component {
                                 'rgba(233, 30, 99, 0.5)'
                             ],
                             borderColor: [
-                                'rgba(233, 30, 99,1)',
                                 'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)',
@@ -570,7 +432,8 @@ class Content extends React.Component {
                                 'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)',
-                                'rgba(233, 30, 99,1)',
+                                'rgba(233, 30, 99, 1)',
+                                'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)',
                                 'rgba(233, 30, 99, 1)'
@@ -584,96 +447,51 @@ class Content extends React.Component {
         }
     }
 
-    dataForInfoBox1(){
-        // Number of Matches
-        if(this.state.dataLoadedMatch){
+    dataForInfoBox1and2 = () => {        
+        // Number of Superovers
+        let superovers = 0;
+
+        if(Object.keys(this.state.rawMatch).length !== 0){
+            // Number of Matches
             this.setState({
                 infoBox1: this.state.rawMatch.data.length - 1
             });
-            this.forceUpdate();
-        }
-    }
 
-    dataForInfoBox2(){
-        // Number of Superovers
-        var superovers = 0;
-
-        if(this.state.dataLoadedMatch){
             for(var i = 0; i < this.state.rawMatch.data.length; i++){
                 if(this.state.rawMatch.data[i].IS_Superover === 1){
                     superovers++;
                 }
             }
 
-            this.setState({
-                infoBox2: superovers
-            });
-            this.forceUpdate();
+            this.setState({ infoBox2: superovers });
         }
     }
 
-    dataForInfoBox3(){
+    dataForInfoBox3and4 = () => {
         // Number of Fours
-        var fours = 0;
-
-        if(this.state.dataLoadedBallByBall){
-            for(var i = 0; i < this.state.rawBallByBall.data.length; i++){
-                if(this.state.rawBallByBall.data[i].Batsman_Scored === 4){
+        let fours = 0;
+        let sixes = 0;
+        if(Object.keys(this.state.rawBallByBall).length !== 0){
+            this.state.rawBallByBall.data.forEach(element => {
+                if(element.Batsman_Scored === 4) {
                     fours++;
                 }
-            }
-            
-            this.setState({
-                infoBox3: fours
-            });
-            this.forceUpdate();
-        }
-    }
-
-    dataForInfoBox4(){
-        // Number of Sixes
-        var sixes = 0;
-
-        if(this.state.dataLoadedBallByBall){
-            for(var i = 0; i < this.state.rawBallByBall.data.length; i++){
-                if(this.state.rawBallByBall.data[i].Batsman_Scored === 6){
+                else if(element.Batsman_Scored === 6) {
                     sixes++;
                 }
-            }
-            
-            this.setState({
-                infoBox4: sixes
             });
-            this.forceUpdate();
+            this.setState({ infoBox3: fours, infoBox4: sixes });
         }
+        this.forceUpdate();
     }
-
-    // Converting CSV file to JSON data
-    getChartData(){
-        Papa.parse('./ipl-csv-dataset/Match.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveMatch});
-        Papa.parse('./ipl-csv-dataset/Player.csv', {header: true, download: true, dynamicTyping: true, complete: this.savePlayer});
-        Papa.parse('./ipl-csv-dataset/Ball_by_Ball.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveBallByBall});
-        /*Papa.parse('./ipl-csv-dataset/Season.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveSeason});
-        Papa.parse('./ipl-csv-dataset/Team.csv', {header: true, download: true, dynamicTyping: true, complete: this.saveTeam});
-        Papa.parse('./ipl-csv-dataset/Player_Match.csv', {header: true, download: true, dynamicTyping: true, complete: this.savePlayerMatch});*/
-    }
-
-    // Saving JSON data to state and calling associated functions to process data
-    saveMatch(result){this.setState({rawMatch: result, dataLoadedMatch: true});this.dataForChart1();this.dataForChart2();this.dataForChart3();this.dataForInfoBox1();this.dataForInfoBox2();}
-    savePlayer(result){this.setState({rawPlayer: result, dataLoadedPlayer: true});this.dataForChart4();this.dataForChart5();this.dataForChart6();}
-    saveBallByBall(result){this.setState({rawBallByBall: result, dataLoadedBallByBall: true});this.dataForChart7();this.dataForChart8();this.dataForInfoBox3();this.dataForInfoBox4();}
-    /*saveSeason(result){this.setState({rawSeason: result});}
-    saveTeam(result){this.setState({rawTeam: result});}
-    savePlayerMatch(result){this.setState({rawPlayerMatch: result});}*/
 
     render() {
         /*==== Calculates current width of browser ====*/
-        var w = window,
+        let w = window,
         d = document,
         e = d.documentElement,
         g = d.getElementsByTagName('body')[0],
         x = w.innerWidth || e.clientWidth || g.clientWidth;
-        /*y = w.innerHeight|| e.clientHeight|| g.clientHeight;*/
 
         return (
             <div className='content-container'>
@@ -681,24 +499,59 @@ class Content extends React.Component {
                     <h1><span className='bold'>Indian Premier League</span> Statistics</h1>
                 </div>
                 <div className='infobox-container'>
-                    <InfoBox data={this.state.infoBox1} title='Total Matches' icon={<i class="fas fa-cricket fa-4x"></i>} text='Matches played till now.' />
-                    <InfoBox data={this.state.infoBox2} title='Total Superovers' icon={<i class="fas fa-cricket fa-4x"></i>} text='Number of tie matches till now.' />
-                    <InfoBox data={this.state.infoBox3} title='Total Fours' icon={<i class="fas fa-cricket fa-4x"></i>} text='Number of balls hitting the boundary.'  />
-                    <InfoBox data={this.state.infoBox4} title='Total Sixes' icon={<i class="fas fa-cricket fa-4x"></i>} text='Number of balls crossing the boundary.'  />
+                    <InfoBox data={this.state.infoBox1} title='Total Matches' icon={<i className="fas fa-cricket fa-4x"></i>} text='Matches played till now.' />
+                    <InfoBox data={this.state.infoBox2} title='Total Superovers' icon={<i className="fas fa-cricket fa-4x"></i>} text='Number of tie matches till now.' />
+                    <InfoBox data={this.state.infoBox3} title='Total Fours' icon={<i className="fas fa-cricket fa-4x"></i>} text='Number of balls hitting the boundary.'  />
+                    <InfoBox data={this.state.infoBox4} title='Total Sixes' icon={<i className="fas fa-cricket fa-4x"></i>} text='Number of balls crossing the boundary.'  />
                 </div>
                 <div className='graph-container'>
-                    <ChartDisplay selectChart='line' chartData={this.state.chartData7} titleText='Average Runs Every Over' selectLabel={true} selectLabelText='Overs' />
-                    <ChartDisplay selectChart='bar' displayLegend={false} chartData={this.state.chartData1} titleText='Batting / Fielding Decision' />
-                    <ChartDisplay selectChart='doughnut' chartData={this.state.chartData3} titleText='Result Type'  />
-                    <ChartDisplay selectChart='pie' chartData={this.state.chartData2} titleText='Matches Hosted By Country' />
-                    <ChartDisplay selectChart='pie' chartData={this.state.chartData4} titleText='Left / Right Handed Batsmen' />
-                    <ChartDisplay selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData5} titleText='Bowling Skill' />
-                    <ChartDisplay selectChart='horizontalBar' displayLegend={false} chartData={this.state.chartData6} titleText='Player Nationality' />
-                    <ChartDisplay selectChart={x < 900 ? 'horizontalBar' : 'bar'} displayLegend={false} chartData={this.state.chartData8} titleText='Player Dismissal Types' />
+                    <ChartDisplay 
+                        selectChart='line' 
+                        chartData={this.state.chartData7} 
+                        titleText='Average Runs Every Over' 
+                        selectLabel={true} 
+                        selectLabelText='Overs' 
+                    />
+                    <ChartDisplay 
+                        selectChart='bar' 
+                        displayLegend={false} 
+                        chartData={this.state.chartData1} 
+                        titleText='Batting / Fielding Decision' 
+                    />
+                    <ChartDisplay 
+                        selectChart='doughnut' 
+                        chartData={this.state.chartData3} 
+                        titleText='Result Type' 
+                    />
+                    <ChartDisplay 
+                        selectChart='pie' 
+                        chartData={this.state.chartData2} 
+                        titleText='Matches Hosted By Country' 
+                    />
+                    <ChartDisplay 
+                        selectChart='pie' 
+                        chartData={this.state.chartData4} 
+                        titleText='Left / Right Handed Batsmen' 
+                    />
+                    <ChartDisplay 
+                        selectChart='horizontalBar' 
+                        displayLegend={false} 
+                        chartData={this.state.chartData5} 
+                        titleText='Bowling Skill' 
+                    />
+                    <ChartDisplay 
+                        selectChart='horizontalBar' 
+                        displayLegend={false} 
+                        chartData={this.state.chartData6} 
+                        titleText='Player Nationality' 
+                    />
+                    <ChartDisplay 
+                        selectChart={x < 900 ? 'horizontalBar' : 'bar'} 
+                        displayLegend={false} chartData={this.state.chartData8} 
+                        titleText='Player Dismissal Types' 
+                    />
                 </div>
             </div>
-            
-            
         )
     }
 }
