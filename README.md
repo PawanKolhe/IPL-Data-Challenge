@@ -13,6 +13,9 @@ A data visualization challenge to build a web app with IPL (Indian Premier Leagu
   - [jQuery](http://jquery.com) - javaScript library
   - [Papaparse](https://www.papaparse.com/) - for parsing CSV files to JSON
 
+## Dataset
+  - [Click Here](https://www.kaggle.com/harsha547/indian-premier-league-csv-dataset)  
+
 ## Link to Hosted Website
   - [Click Here](https://socialcops.netlify.com)  
   *(Hosted on Netlify)*
@@ -36,6 +39,7 @@ A data visualization challenge to build a web app with IPL (Indian Premier Leagu
   - I decided to add a fullscreen toggle button in the header bar because an admin panel is best viewed in fullscreen. Less clutter, the better. :)
   
 ## Potential New Features/Improvements
+  - Storing parsed JSON data in database for faster reading.
   - Can add a loading animation while the data and graphs are loading.
   - Display more data related to players such as who won the most purple caps?
   - Make a trivia using this data to make the web app more fun and interactive.
