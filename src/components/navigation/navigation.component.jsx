@@ -1,7 +1,7 @@
 import React from 'react';
-import './nav.css';
-import logo from '../img/logo.png';
-import logosmall from '../img/logo-small.png';
+import './navigation.styles.css';
+import logo from '../../img/logo.png';
+import logosmall from '../../img/logo-small.png';
 
 function Nav() {
     return (

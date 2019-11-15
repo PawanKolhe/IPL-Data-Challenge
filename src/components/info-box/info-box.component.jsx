@@ -1,5 +1,5 @@
 import React from 'react';
-import './infobox.css';
+import './info-box.styles.css';
 
 class InfoBox extends React.Component {
     constructor(props){

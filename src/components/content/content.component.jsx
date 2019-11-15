@@ -1,10 +1,10 @@
 import React from 'react';
 import Papa from 'papaparse';
 
-import InfoBox from './InfoBox';
-import ChartDisplay from './ChartDisplay';
+import InfoBox from '../info-box/info-box.component';
+import ChartDisplay from '../chart-display/chart-display.component';
 
-import './content.css';
+import './content.styles.css';
 
 class Content extends React.Component {
     constructor(){

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import StickyBar from './components/StickyBar';
-import Nav from './components/Nav';
-import Content from './components/Content';
+import StickyBar from './components/sticky-bar/sticky-bar.component';
+import Nav from './components/navigation/navigation.component';
+import Content from './components/content/content.component';
 
 class App extends Component {
   componentDidMount(){

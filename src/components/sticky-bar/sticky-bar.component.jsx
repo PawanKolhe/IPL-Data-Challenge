@@ -1,6 +1,6 @@
 import React from 'react';
-import './stickybar.css';
-import user from '../img/user.jpg';
+import './sticky-bar.styles.css';
+import user from '../../img/user.jpg';
 
 class StickyBar extends React.Component {
     render(){

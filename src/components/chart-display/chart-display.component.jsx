@@ -1,5 +1,5 @@
 import React from 'react';
-import './chart.css';
+import './chart-display.styles.css';
 import ChartComponent from 'react-chartjs-2';
 
 class ChartDisplay extends React.Component {
