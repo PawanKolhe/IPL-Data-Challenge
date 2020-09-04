@@ -6,7 +6,7 @@
     "chart.js": "^2.7.3",
     "chartjs-plugin-datalabels": "^0.5.0",
     "chartjs-plugin-deferred": "^1.0.1",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.2.0",
     "react": "^16.8.1",
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.8.1",
